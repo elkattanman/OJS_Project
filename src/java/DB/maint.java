@@ -17,13 +17,7 @@ import model.post;
 public class maint {
 
     public static void main(String[] args) {
-        PostDOA o = new PostDOA();
-        ArrayList<post> i = o.VIEWPOST_cat("1");
-        System.out.println(i);
-      
-    
-       
-
-      
+        UserDOA o=new UserDOA();
+        System.out.println(o.login("sasa", "admin", "1"));
     }
 }

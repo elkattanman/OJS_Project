@@ -43,15 +43,15 @@ public class login extends HttpServlet {
                 s = "1";
             } else if (s.equals("Author")) {
                 s = "2";
-             
+
             } else if (s.equals("Reviewer")) {
                 s = "3";
-         
+
             } else if (s.equals("Manager")) {
                 s = "4";
             }
-           
-            boolean check = new UserDOA().login(e, p);
+            UserDOA db = new UserDOA();
+            boolean check = db.login(e, p, s);
 
             if (check) {
                 System.out.println("here");

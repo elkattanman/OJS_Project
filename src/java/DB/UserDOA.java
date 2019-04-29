@@ -10,17 +10,16 @@ public class UserDOA {
 
     Connection con = DBConnection.GetConnection();
 
-    String insert_query = " INSERT INTO users VALUES(?,?,?,?,?,?,?,?,?,?)";
-    String insert_query_userpem = " INSERT INTO userpermetion VALUES(?,?,?)";
-    String login_query = "SELECT  pass FROM users WHERE uname = ? and  	pass = ?";
-    String search_query = "SELECT  * FROM users WHERE uname = ? ";
-    String search_query1 = "SELECT   users.uname  ,   pass  ,   name  ,   email  ,   DOB  ,   image  ,   gender  ,   phone  ,   cat_id  ,   cv   ,  perm_id  ,     states   FROM users  JOIN userpermetion ON users.uname =userpermetion.uname  WHERE users.uname = ? and userpermetion.states = ? ";
+    String insert_user = " INSERT INTO users VALUES(?,?,?,?,?,?,?,?,?,?)";
+    String insert_userperm = " INSERT INTO userpermetion VALUES(?,?,?)";
+    String login_query = "SELECT * FROM users as u JOIN userpermetion as p on u.uname=p.uname WHERE (u.uname=? and u.pass=?) and (p.perm_id=? and p.states='1')";
+    String search_query = "SELECT   users.uname  ,   pass  ,   name  ,   email  ,   DOB  ,   image  ,   gender  ,   phone  ,   cat_id  ,   cv   ,  perm_id  ,     states   FROM users  JOIN userpermetion ON users.uname =userpermetion.uname  WHERE users.uname = ? and perm_id=?";
 
     public boolean insert(User u, int author, int reviewer) {
         PreparedStatement ps, psusp;
         try {
-            ps = con.prepareStatement(insert_query);
-            psusp = con.prepareStatement(insert_query_userpem);
+            ps = con.prepareStatement(insert_user);
+            psusp = con.prepareStatement(insert_userperm);
             ps.setString(1, u.getUname());
             ps.setString(2, u.getPass());
             ps.setString(3, u.getName());
@@ -68,15 +67,15 @@ public class UserDOA {
         // ps.setBlob(8, u.getCv());        
     }
 
-    public boolean login(String uname, String pass) {
+    public boolean login(String uname, String pass , String perm) {
         PreparedStatement preparedStmt;
         try {
             preparedStmt = con.prepareStatement(login_query);
             preparedStmt.setString(1, uname);
             preparedStmt.setString(2, pass);
+            preparedStmt.setString(3, perm);
             ResultSet rs = preparedStmt.executeQuery();
             if (rs.next()) {
-                String p = rs.getString("pass");
                 return true;
             } else {
                 return false;
@@ -86,17 +85,18 @@ public class UserDOA {
         }
         return false;
     }
+    
 
-    public User searchUser(String uname ,String stat) {
+    public User searchUser(String uname ,String prem_id) {
         User ret = new User();
         PreparedStatement preparedStmt;
         try {
-            preparedStmt = con.prepareStatement(search_query1);
+            preparedStmt = con.prepareStatement(search_query);
             preparedStmt.setString(1, uname);
-            preparedStmt.setString(2, stat);
+            preparedStmt.setString(2, prem_id);
+            //users.uname  ,   pass  ,   name  ,   email  ,   DOB  ,   image  ,   gender  ,   phone  ,   cat_id  ,   cv   ,  perm_id  ,     states
             ResultSet rs = preparedStmt.executeQuery();
             if (rs.next()) {
-                
                 ret.setUname(rs.getString(1));
                 ret.setPass(rs.getString(2));
                 ret.setName(rs.getString(3));
@@ -107,7 +107,7 @@ public class UserDOA {
                 ret.setPhone(rs.getString(8));
                 ret.setCid(rs.getString(9));
                 ret.setCv(rs.getBlob(10).getBinaryStream());
-                ret.setType("1");
+                ret.setType(prem_id);
                 System.out.println(ret);
             }
         } catch (SQLException ex) {
