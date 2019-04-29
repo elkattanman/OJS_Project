@@ -55,7 +55,7 @@ public class login extends HttpServlet {
 
             if (check) {
                 System.out.println("here");
-                User user = new UserDOA().searchUser(e, s);
+                User user = db.searchUser(e, s);
                 out.print(user);
                 System.out.println(user);
                 request.getSession().setAttribute("user", user);
