@@ -375,28 +375,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="changepass">
-                                        <form class="form-horizontal">
+                                         <form class="form-horizontal" action="ChangePassword" method="post">
 
                                             <div class="box-body">
                                                 <div class="form-group">
                                                     <label for="cur_pass" class ="col-sm-2">Currenet Password</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                                        <input type="password" class="form-control" id= "cur_pass"placeholder="Current Password">
+                                                        <input type="password" class="form-control" id= "cur_pass"placeholder="Current Password" name="currentPass">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="new_pass" class ="col-sm-2">New Password</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                                        <input type="password" class="form-control" id= "new_pass"placeholder="New Password">
+                                                        <input type="password" class="form-control" id= "new_pass"placeholder="New Password" name="NewPass">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="re_pass" class ="col-sm-2">repeat Password</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                                        <input type="password" class="form-control" id= "re_pass"placeholder="Repeat Password">
+                                                        <input type="password" class="form-control" id= "re_pass"placeholder="Repeat Password" name="RepPass">
                                                     </div>
                                                 </div>
                                             </div>
