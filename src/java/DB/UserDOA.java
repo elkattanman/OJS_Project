@@ -14,7 +14,7 @@ public class UserDOA {
     String insert_userperm = " INSERT INTO userpermetion VALUES(?,?,?)";
     String login_query = "SELECT * FROM users as u JOIN userpermetion as p on u.uname=p.uname WHERE (u.uname=? and u.pass=?) and (p.perm_id=? and p.states='1')";
     String search_query = "SELECT   users.uname  ,   pass  ,   name  ,   email  ,   DOB  ,   image  ,   gender  ,   phone  ,   cat_id  ,   cv   ,  perm_id  ,     states   FROM users  JOIN userpermetion ON users.uname =userpermetion.uname  WHERE users.uname = ? and perm_id=?";
-    String update_settings = "UPDATE `users` SET `name`=?,`email`=?,`phone`=? WHERE uname = ?;";
+    String update_settings = "UPDATE `users` SET `name`=? , `email` = ? , `phone` = ? WHERE uname = ? ;";
     String update_password = "UPDATE `users` SET `pass`=? WHERE uname = ?;";
     public boolean insert(User u, int author, int reviewer) {
         PreparedStatement ps, psusp;

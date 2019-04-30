@@ -409,27 +409,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <!-- /.tab-pane -->
 
                                     <div class="tab-pane" id="settings">
-                                        <form class="form-horizontal">
+                                        <form class="form-horizontal" action="Setting">
                                             <div class="form-group">
-                                                <label for="edu" class="col-sm-2 control-label">Eduction</label>
+                                                <label for="name" class="col-sm-2 control-label">Name</label>
 
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="edu" placeholder="Education">
+                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="loc" class="col-sm-2 control-label">Loction</label>
+                                                <label for="email" class="col-sm-2 control-label">Email</label>
 
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="loc" placeholder="Loction">
+                                                    <input type="text" class="form-control" id="email" name="email" placeholder="Email">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="bio" class="col-sm-2 control-label">BIO</label>
+                                                <label for="phone" class="col-sm-2 control-label">Phone</label>
 
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="bio" placeholder="BIO">
+                                                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone">
                                                 </div>
                                             </div>
                                             <div class="form-group">
