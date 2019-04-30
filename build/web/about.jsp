@@ -64,7 +64,7 @@ desired effect
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>O</b>JS</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>اقرأ</b> OJS</span>
+      <span class="logo-lg"><b>EQRA</b> OJS</span>
     </a>
 
     <!-- Header Navbar -->
@@ -133,7 +133,7 @@ desired effect
           <img src="data:image/jpg;base64,${user.base64Image}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p>${user.name}</p>
           <!-- Status -->
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
@@ -163,10 +163,13 @@ desired effect
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Scientific</a></li>
-            <li><a href="#">Computer Science</a></li>
-            <li><a href="#">Sport</a></li>
-            <li><a href="#">Art</a></li>
+           <sql:setDataSource var="db" driver="com.mysql.jdbc.Driver"  url="jdbc:mysql://localhost/journal"  user="root"  password=""/>  
+                                <sql:query dataSource="${db}" var="rs">  
+                                    SELECT * FROM catog;  
+                                </sql:query> 
+                                <c:forEach items="${rs.rows}" var="cat">
+                                    <li><a href="index.jsp?cat_id=${cat.cat_id}">${cat.cat_name}</a></li>
+                                </c:forEach>
           </ul>
         </li>
         <li class="treeview">
@@ -176,9 +179,9 @@ desired effect
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Review submession</a></li>
-            <li><a href="#">Manage Users</a></li>
-            <li><a href="#">Appending Posts</a></li>
+             <li><a href="ReviewSubmession.jsp">Appending Posts</a></li>
+                                <li><a href="userstate.jsp">Manage Users</a></li>
+                                <li><a href="rejectedpost.jsp">rejected Posts</a></li>
           </ul>
         </li>
         <li class="active"><a href="about.jsp"><i class="fa fa-send"></i> <span>about us</span></a></li>
@@ -203,11 +206,41 @@ desired effect
 
     <!-- Main content -->
     <section class="content container-fluid">
+  <div class="box-body table-responsive no-padding">
+                                    <table class="table table-hover">
+                                        <tr>
 
+                                           
+                                            <th>image</th>
+                                            <th>Name</th>
+                                            <th>section</th>
+                                            <th>phone</th>
+                                            <th>team</th>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td><img src="dist/img/smsm.jpeg" class="img-circle" alt="User Image"></td>
+                                            <td><span class="label label-primary text-bold ">Mohamed Osama EL shwaikh </span></td>
+                                            <td><span class="label label-success text-center">3</span></td>
+                                            <td><span class="label label-danger text-center">01009756176</span></td>
+                                            <td><span class="label label-info text-center">Team Leader</span></td>
+                                             
+                                        </tr>
+                                        <tr>
+                                            <td><img src="dist/img/desha.jpeg" class="img-circle" alt="User Image"></td>
+                                            <td><span class="label label-primary text-center">Mostafa Khaled Abd El Fattah </span></td>
+                                            <td><span class="label label-success text-center">3</span></td>
+                                            <td><span class="label label-danger text-center">01026686241</span></td>
+                                            <td><span class="label label-info text-center">Team Member</span></td>
+                                             
+                                        </tr>
+                                         
+                                    </table>
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
-
+      
     </section>
     <!-- /.content -->
   </div>

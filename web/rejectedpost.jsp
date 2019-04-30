@@ -1,5 +1,11 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@page import="javax.swing.JOptionPane"%>
+<%@page import="DB.PostDOA"%>
+<%@page import="model.post"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="DB.UserDOA"%>
+<%@page import="model.User"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -9,7 +15,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>EQRA JS</title>
+        <title>OJS</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -35,26 +41,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     </head>
-    <!--
-    BODY TAG OPTIONS:
-    =================
-    Apply one or more of the following classes to get the
-    desired effect
-    |---------------------------------------------------------|
-    | SKINS         | skin-blue                               |
-    |               | skin-black                              |
-    |               | skin-purple                             |
-    |               | skin-yellow                             |
-    |               | skin-red                                |
-    |               | skin-green                              |
-    |---------------------------------------------------------|
-    |LAYOUT OPTIONS | fixed                                   |
-    |               | layout-boxed                            |
-    |               | layout-top-nav                          |
-    |               | sidebar-collapse                        |
-    |               | sidebar-mini                            |
-    |---------------------------------------------------------|
-    -->
+
+
+    <%
+        //filter
+        if (request.getSession().getAttribute("user") == null) {
+            User i = new UserDOA().searchUser("UNKNOWN", "1");
+            request.getSession().setAttribute("user", i);
+        }
+        String cat_id = request.getParameter("cat_id");
+        ArrayList<post> all = null;
+        if (cat_id == null) {
+            all = new PostDOA().VIEWPOSTREJ();
+        } else {
+            all = new PostDOA().VIEWPOST_cat_rej(cat_id);
+        }
+        request.setAttribute("posts", all);
+    %>
+
     <body class="hold-transition skin-blue sidebar-mini">
         <div class="wrapper">
 
@@ -66,7 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <!-- mini logo for sidebar mini 50x50 pixels -->
                     <span class="logo-mini"><b>O</b>JS</span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg"><b>EQRA</b> OJS</span>
+                    <span class="logo-lg"><b>EQRA </b> OJS</span>
                 </a>
 
                 <!-- Header Navbar -->
@@ -93,18 +97,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <img src="data:image/jpg;base64,${user.base64Image}" class="img-circle" alt="User Image">
 
                                         <p>
-                                            ${user.name} - ${user.type}
-                                            <small> ${user.email}</small>
+                                            ${user.name} -     ${user.type}
+                                            <small>    ${user.email}</small>
                                         </p>
                                     </li>
                                     <!-- Menu Body -->
                                     <li class="user-body">
                                         <div class="row">
-                                            <div class="col-xs-4 text-center"></div>
-                                            <div class="col-xs-4 text-center">
-                                                <a href="#">Welcome</a>
+                                            
+                                            <div class="col-xs-8 text-center">
+                                                <a href="register.jsp">Sign up</a>
                                             </div>
-                                            <div class="col-xs-4 text-center"></div>
+                                            <div class="col-xs-4 text-center">
+                                                <a href="login.jsp">Login</a>
+                                            </div>
+                                            
                                         </div>
                                         <!-- /.row -->
                                     </li>
@@ -135,7 +142,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <img src="data:image/jpg;base64,${user.base64Image}" class="img-circle" alt="User Image">
                         </div>
                         <div class="pull-left info">
-                            <p>Alexander Pierce</p>
+                            <p>${user.name} </p>
                             <!-- Status -->
                             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                         </div>
@@ -157,7 +164,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <ul class="sidebar-menu" data-widget="tree">
                         <li class="header">HEADER</li>
                         <!-- Optionally, you can add icons to the links -->
-                        <li><a href="index.jsp"><i class="fa fa-home"></i> <span>Home Page</span></a></li>
+                        <li class="active"><a href="index.jsp"><i class="fa fa-home"></i> <span>Home Page</span></a></li>
                         <li class="treeview">
                             <a href="#"><i class="fa  fa-edit"></i> <span>Categories</span>
                                 <span class="pull-right-container">
@@ -165,13 +172,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </span>
                             </a>
                             <ul class="treeview-menu">
+
                                 <sql:setDataSource var="db" driver="com.mysql.jdbc.Driver"  url="jdbc:mysql://localhost/journal"  user="root"  password=""/>  
                                 <sql:query dataSource="${db}" var="rs">  
                                     SELECT * FROM catog;  
                                 </sql:query> 
                                 <c:forEach items="${rs.rows}" var="cat">
                                     <li><a href="index.jsp?cat_id=${cat.cat_id}">${cat.cat_name}</a></li>
-                                    </c:forEach>
+                                </c:forEach>
                             </ul>
                         </li>
                         <li class="treeview">
@@ -181,12 +189,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="ReviewSubmession.jsp">Appending Posts</a></li>
+                         <li><a href="ReviewSubmession.jsp">Appending Posts</a></li>
                                 <li><a href="userstate.jsp">Manage Users</a></li>
                                 <li><a href="rejectedpost.jsp">rejected Posts</a></li>
                             </ul>
                         </li>
-                        <li class="active"><a href="about.jsp"><i class="fa fa-send"></i> <span>About Us</span></a></li>
+                        <li><a href="about.jsp"><i class="fa fa-send"></i> <span>about us</span></a></li>
                     </ul>
                     <!-- /.sidebar-menu -->
                 </section>
@@ -198,113 +206,81 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        All Users
-                        <small>.</small>
+                       rejected Page
+                        <small>All submissions</small>
                     </h1>
                     <ol class="breadcrumb">
-                        <li class="active"><a href="about.jsp"><i class="fa fa-send"></i> about us</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> rejected page</a></li>
+                        <li class="active">all</li>
                     </ol>
                 </section>
 
                 <!-- Main content -->
                 <section class="content container-fluid">
-
                     <!--------------------------
                     | Your Page Content Here |
                     -------------------------->
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="box">
-                                <div class="box-header">
-                                    <h3 class="box-title">ALL USERS </h3>
 
-                                    <div class="box-tools">
-                                        <div class="input-group input-group-sm" style="width: 150px;">
-                                            <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
 
-                                            <div class="input-group-btn">
-                                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                    <c:forEach items="${posts}" var="post">
+                        <!-- post -->
+
+                        <div class="box box-widget">
+                            <div class="box-header with-border">
+                                <div class="user-block">
+
+                                    <img class="img-circle" src="data:image/jpg;base64,${post.getBase64Image()}" alt="User Image">
+                                    <span class="username"><a href="#">${post.getName()}</a></span>
+                                    <span class="description">${post.getUname()} - ${post.getTime_stamp()}</span>
+                                </div>
+                                <!-- /.user-block -->
+                                <div class="box-tools">
+                                    <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Mark as read">
+                                        <i class="fa fa-circle-o"></i></button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                </div>
+                                <!-- /.box-tools -->
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+
+                                <h3 >${post.getTitle()}</h3>
+                                <p>${post.getDescription()}</p>
+                                <!-- Box Materail -->
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <a href="DBFileDownloadServlet?id=${post.getId()}&type=1" ><button  class="btn pull-right btn-primary">PDF</button></a>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <a href="DBFileDownloadServlet?id=${post.getId()}&type=2" ><button class="btn pull-right btn-primary">docs</button></a>
+                                                <!--<button type="submit" class="btn btn-danger pull-right btn-primary btn-block btn-sm">Send</button>-->
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <a href="DBFileDownloadServlet?id=${post.getId()}&type=3" ><button class="btn pull-right btn-primary">HTML</button></a>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- /.box-header -->
-                                <div class="box-body table-responsive no-padding">
-                                    <table class="table table-hover">
-                                        <tr>
+                                             
+                                            
+                                             <div class="box-footer">
+                                              <a href="updateState?id=${post.getId()}&state=1" >  <button   class="btn btn-success pull-right">    accepted </button>  </a>
+                                                          </div>
+                                </form>
+                                <!-- /.box-materail -->
 
-                                            <th>User Name</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>DOB</th>
-                                            <th>Gender</th>
-                                            <th>phone</th>
-                                            <th>category</th>
-                                            <th>cv</th>
-                                            <th>Type</th>
-                                            <th>State</th>
-                                            <th>permission</th>
-                                        </tr>
-                                        <sql:setDataSource var="db" driver="com.mysql.jdbc.Driver"  url="jdbc:mysql://localhost/journal"  user="root"  password=""/>  
-                                        <sql:query dataSource="${db}" var="rs">  
-                                            SELECT * FROM users AS u  JOIN userpermetion AS p ON u.uname= p.uname ;  
-                                        </sql:query> 
-
-                                        <c:forEach items="${rs.rows}" var="u">
-                                            <tr>
-                                                <td>${u.uname}</td>
-                                                <td>${u.name}</td>
-                                                <td>${u.email}</td>
-                                                <td>${u.DOB}</td>
-                                                <td>${u.gender}</td>
-                                                <td>${u.phone}</td>
-                                                <td>
-                                                    <c:if test = "${u.cat_id ==  1}"> <span class="label label-primary">CS</span> </c:if>
-                                                    <c:if test = "${u.cat_id ==  2}"> <span class="label label-primary">IS</span> </c:if>
-                                                    <c:if test = "${u.cat_id ==  3}"> <span class="label label-primary">it</span> </c:if>
-                                                    <c:if test = "${u.cat_id ==  4}"> <span class="label label-primary">or</span> </c:if>
-                                                    </td>
-                                                    <td>
-
-                                                        <a href="DBFileDownloadServlet?uname=${u.uname}&bid=${u.perm_id}" ><button  class="btn  btn-primary">PDF</button></a>
-
-                                                </td>
-                                                <td> 
-                                                    <c:if test = "${u.perm_id ==  1}"> <span class="label label-default">Reader</span> </c:if>
-                                                    <c:if test = "${u.perm_id ==  2}"> <span class="label label-danger">Auther</span> </c:if>
-                                                    <c:if test = "${u.perm_id ==  3}"> <span class="label label-warning">Reviewer</span> </c:if>
-
-                                                    </td>
-                                                    <td>
-                                                    <c:if test = "${u.states ==  1}"> <span class="label label-success">Approved</span> </c:if> 
-                                                    <c:if test = "${u.states ==  0}">  <span class="label label-warning">pinding</span></c:if> 
-                                                    </td> 
-
-                                                    <td> 
-
-                                                        <a href=" acceptuser.jsp?uname=${u.uname}&perm_id=${u.perm_id} " 
-                                                       <button
-                                                            class="label label-success pull-left" type="submit" name="accept"  >    accepted  </button>
-                                                    </a>
-
-
-                                                    <a   href=" rejectuser.jsp?uname=${u.uname}&perm_id=${u.perm_id} " >      
-                                                        <span  class="label label-danger pull-right">  Rejected   </span> </a>
-
-                                                </td>
-
-                                            </tr>
-                                        </c:forEach>
-
-
-
-                                    </table>
-                                </div>
-                                <!-- /.box-body -->
+                                 
+                                <span class="pull-right text-muted">${post.getCateg()}</span>
                             </div>
-                            <!-- /.box -->
+                            <!-- /.box-body -->
+
                         </div>
-                    </div>
+                        <!-- /.post -->
+                    </c:forEach>
+
                 </section>
                 <!-- /.content -->
             </div>
@@ -314,10 +290,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <footer class="main-footer">
                 <!-- To the right -->
                 <div class="pull-right hidden-xs">
-                    Anything you want
+                    Version 1.0
                 </div>
                 <!-- Default to the left -->
-                <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+                <strong>Copyright &copy; 2019 <a href="#">Company</a>.</strong> All rights reserved.
             </footer>
 
             <!-- Add the sidebar's background. This div must be placed

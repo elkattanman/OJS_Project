@@ -1,9 +1,20 @@
+<%-- 
+    Document   : otheruser
+    Created on : Apr 30, 2019, 9:20:37 PM
+    Author     : mustafa
+--%>
+<%@ page import="java.io.*,java.util.*,java.sql.*"%>  
+<%@ page import="javax.servlet.http.*,javax.servlet.*" %>  
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>  
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>   
+<%@page import="DB.UserDOA"%>
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="model.User"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="DB.PostDOA"%>
 <%@page import="model.post"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -59,10 +70,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     |               | sidebar-mini                            |
     |---------------------------------------------------------|
     -->
-    
+
     <%
-        User u=(User)request.getSession().getAttribute("user");
-        ArrayList<post> all = new PostDOA().VIEWPOST_uname(u.getUname());
+        String n = request.getParameter("uname");
+        ArrayList<post> all = new PostDOA().VIEWPOST_uname(n);
         request.setAttribute("posts", all);
     %>
     <body class="hold-transition skin-blue sidebar-mini">
@@ -182,7 +193,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </sql:query> 
                                 <c:forEach items="${rs.rows}" var="cat">
                                     <li><a href="index.jsp?cat_id=${cat.cat_id}">${cat.cat_name}</a></li>
-                                </c:forEach>
+                                    </c:forEach>
                             </ul>
                         </li>
                         <li class="treeview">
@@ -209,12 +220,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                       Profile
-                        <small>${user.uname}</small>
+                        <%= n.toUpperCase()%>  Page
+                        <small>All submissions</small>
                     </h1>
                     <ol class="breadcrumb">
-                         <li><a href="#"><i class="fa fa-dashboard"></i> profile</a></li>
-                        <li class="active">${user.uname}</li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Home page</a></li>
+                        <li class="active">all</li>
                     </ol>
                 </section>
 
@@ -224,72 +235,83 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <!--------------------------
                     | Your Page Content Here |
                     -------------------------->
+
+                    <sql:setDataSource var="d" driver="com.mysql.jdbc.Driver"  url="jdbc:mysql://localhost/journal"  user="root"  password=""/>  
+                    <sql:query var="result"  dataSource="${d}">
+                        SELECT * FROM users WHERE uname = ? ;
+                        <sql:param value="<%= n%>" />
+
+                    </sql:query>
+
                     <div class="row">
                         <div class="col-md-3">
 
                             <!-- Profile Image -->
-                            <div class="box box-primary">
-                                <div class="box-body box-profile">
-                                    <img class="profile-user-img img-responsive img-circle" src= "data:image/jpg;base64,${user.base64Image}"   alt="User profile picture">
+                            <c:forEach var = "row" items = "${result.rows}">
+                                <div class="box box-primary">
+                                    <div class="box-body box-profile">
+                                      
+                                        <h3 class="profile-username text-center">  <c:out value = "${row.name}"/> </h3>
 
-                                    <h3 class="profile-username text-center">${user.name}</h3>
+                                        <p class="text-muted text-center">
+                                            <c:if test = "${user.type ==  1}"> <span class="label label-success">CS</span> </c:if> 
+                                            <c:if test = "${user.type ==  2}">  <span class="label label-warning">IS</span></c:if> 
+                                            <c:if test = "${user.type ==  3}">  <span class="label label-warning">IT</span></c:if> 
+                                            <c:if test = "${user.type ==  4}">  <span class="label label-warning">Or</span></c:if> 
 
-                                    <p class="text-muted text-center">${user.type}</p>
+                                            </p>
 
-                                    <ul class="list-group list-group-unbordered">
-                                        <li class="list-group-item">
-                                            <b>Followers</b> <a class="pull-right">1,322</a>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <b>Submession</b> <a class="pull-right">${posts.size()}</a>
-                                        </li>
-                                    </ul>
+                                            <ul class="list-group list-group-unbordered">
+                                                <li class="list-group-item">
+                                                    <b>Followers</b> <a class="pull-right">1,322</a>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <b>Submession</b> <a class="pull-right">${posts.size()}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- /.box-body -->
                                 </div>
-                                <!-- /.box-body -->
+                                <!-- /.box -->
+
+                                <!-- About Me Box -->
+                                <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">About Me</h3>
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <div class="box-body">
+                                        <strong><i class="fa fa-book margin-r-5"></i> EMAIL</strong>
+
+                                        <p class="text-muted">
+                                            <c:out value = "${row.email}"/>
+                                        </p>
+
+                                        <hr>
+
+                                        <strong><i class="fa fa-map-marker margin-r-5"></i> PHONE NUMBER </strong>
+
+                                        <p class="text-muted"><c:out value = "${row.phone}"/></p>
+                                        <hr>
+
+                                        <strong><i class="fa fa-file-text-o margin-r-5"></i> Bio</strong>
+
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                                <!-- /.box -->
                             </div>
-                            <!-- /.box -->
-
-                            <!-- About Me Box -->
-                            <div class="box box-primary">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">About Me</h3>
-                                </div>
-                                <!-- /.box-header -->
-                                <div class="box-body">
-                                    <strong><i class="fa fa-at margin-r-5"></i>EMAIL</strong>
-
-                                    <p class="text-muted">
-                                        ${user.email}
-                                    </p>
-
-                                    <hr>
-
-                                    <strong><i class="fa fa-phone margin-r-5"></i> PHONE NUMBER </strong>
-
-                                    <p class="text-muted">${user.phone}</p>
-                                    <hr>
-
-                                    <strong><i class="fa fa-file-text-o margin-r-5"></i> Bio</strong>
-
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
-                                </div>
-                                <!-- /.box-body -->
-                            </div>
-                            <!-- /.box -->
-                        </div>
+                        </c:forEach>
                         <!-- /.col -->
                         <div class="col-md-9">
                             <div class="nav-tabs-custom">
-                                <ul class="nav nav-tabs">
-                                    <li class="active"><a href="#activity" data-toggle="tab">Activity</a></li>
-                                    <li><a href="#writepost" data-toggle="tab">Write Post</a></li>
-                                    <li><a href="#changepass" data-toggle="tab">Change Password</a></li>
-                                    <li><a href="#settings" data-toggle="tab">Settings</a></li>
-                                </ul>
+
                                 <div class="tab-content">
                                     <div class="active tab-pane" id="activity">
+
                                         <c:forEach items="${posts}" var="post">
-                                            <!-- post -->
+                                            <!-- elpost -->
                                             <div class="box box-widget">
                                                 <div class="box-header with-border">
                                                     <div class="user-block">
@@ -304,7 +326,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                             <i class="fa fa-circle-o"></i></button>
                                                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                                         </button>
-                                                        <a href="removepost.jsp?title=${post.getTitle()}"    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> </a>
+                                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                                                     </div>
                                                     <!-- /.box-tools -->
                                                 </div>
@@ -318,21 +340,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         <div class="form-group">
                                                             <div class="row">
                                                                 <div class="col-xs-3">
-                                                                  <a href="DBFileDownloadServlet?id=${post.getId()}&type=${1}" >  <button class="btn pull-right btn-primary">PDF</button></a>
+                                                                    <a href="DBFileDownloadServlet?id=${post.getId()}&type=${1}" >  <button class="btn pull-right btn-primary">PDF</button></a>
                                                                 </div>
                                                                 <div class="col-xs-3">
                                                                     <a href="DBFileDownloadServlet?id=${post.getId()}&type=${2}" > <button class="btn pull-right btn-primary">DOCS</button></a>
                                                                     <!--<button type="submit" class="btn btn-danger pull-right btn-primary btn-block btn-sm">Send</button>-->
                                                                 </div>
                                                                 <div class="col-xs-3">
-                                                                <a href="DBFileDownloadServlet?id=${post.getId()}&type=${3}" >    <button class="btn pull-right btn-primary">HTML</button></a>
+                                                                    <a href="DBFileDownloadServlet?id=${post.getId()}&type=${3}" >    <button class="btn pull-right btn-primary">HTML</button></a>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </form>
                                                     <!-- /.box-materail -->
 
-                                                     
+
                                                     <span class="pull-right text-muted">${post.getCateg()}</span>
                                                 </div>
                                                 <!-- /.box-body -->
@@ -342,116 +364,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </c:forEach>
                                     </div>
                                     <!-- /.tab-pane -->
-                                    <div class="tab-pane" id="writepost">
-                                        <form class="form-horizontal" action="writepost" method="post" enctype="multipart/form-data">
-                                            <div class="box-body">
-                                                <div class="form-group">
-                                                    <label for="title" >Title</label>
-                                                    <input type="text" class="form-control" id="title" placeholder="Enter Title ..." name="title">
-                                                </div><div class="form-group">
-                                                    <label for="key" >Key word</label>
-                                                    <input type="text" class="form-control" id="key" placeholder="Enter keyword ..." name="keyword">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="disc" >Description</label>
-                                                    <textarea class="form-control" id="disc" rows="3" placeholder="Enter Discription ..." name="post"></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="row">
-                                                        <label for="pdfFile" class="col-xs-2">PDF File</label> <input type="file" id="pdfFile" name="pdfFile">
-                                                    </div>      
-                                                    <div class="row">
-                                                        <label for="docsFile" class="col-xs-2">Docs File</label> <input type="file" id="docsFile" name="docsFile">
-                                                    </div>
-                                                    <div class="row">
-                                                        <label for="htmlFile" class="col-xs-2">Html File</label> <input type="file" id="htmlFile" name="htmlFile">
-                                                    </div>
-                                                    <p class="help-block">Example a.pdf , b.docs , c.html</p>
-                                                </div>
 
-                                            </div>
-                                            <div class="box-footer">
-                                                <button type="submit" class="btn btn-facebook pull-right">Submit</button>
-                                            </div>
-                                        </form>
-                                    </div>
+                                    <!-- /.tab-pane -->
+
                                     <!-- /.tab-pane -->
 
                                     <!-- /.tab-pane -->
-                                    <div class="tab-pane" id="changepass">
-                                       <form class="form-horizontal" action="ChangePassword" method="post">
 
-                                            <div class="box-body">
-                                                <div class="form-group">
-                                                    <label for="cur_pass" class ="col-sm-2">Currenet Password</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                                         <input type="password" class="form-control" id= "cur_pass"placeholder="Current Password" name="currentPass">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="new_pass" class ="col-sm-2">New Password</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                                        <input type="password" class="form-control" id= "new_pass"placeholder="New Password" name="NewPass">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="re_pass" class ="col-sm-2">repeat Password</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                                        <input type="password" class="form-control" id= "re_pass"placeholder="Repeat Password" name="RepPass">
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            <div class="box-footer">
-                                                <button type="submit" class="btn btn-danger pull-right">Change</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!-- /.tab-pane -->
-
-                                    <div class="tab-pane" id="settings">
-                                        <form class="form-horizontal" action="Setting">
-                                            <div class="form-group">
-                                                <label for="name" class="col-sm-2 control-label">Name</label>
-
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="email" class="col-sm-2 control-label">Email</label>
-
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="email" name="email" placeholder="Email">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="phone" class="col-sm-2 control-label">Phone</label>
-
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-offset-2 col-sm-10">
-                                                    <div class="checkbox">
-                                                        <label>
-                                                            <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-offset-2 col-sm-10">
-                                                    <button type="submit" class="btn btn-danger">Submit</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
                                     <!-- /.tab-pane -->
                                 </div>
                                 <!-- /.tab-content -->
@@ -470,7 +390,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <footer class="main-footer">
                 <!-- To the right -->
                 <div class="pull-right hidden-xs">
-                    version 1
+                    Anything you want
                 </div>
                 <!-- Default to the left -->
                 <strong>Copyright &copy; 2019 <a href="#">My Team</a>.</strong> All rights reserved.

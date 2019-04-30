@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -163,10 +165,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="#">Scientific</a></li>
-                                <li><a href="#">Computer Science</a></li>
-                                <li><a href="#">Sport</a></li>
-                                <li><a href="#">Art</a></li>
+                                <sql:setDataSource var="db" driver="com.mysql.jdbc.Driver"  url="jdbc:mysql://localhost/journal"  user="root"  password=""/>  
+                                <sql:query dataSource="${db}" var="rs">  
+                                    SELECT * FROM catog;  
+                                </sql:query> 
+                                <c:forEach items="${rs.rows}" var="cat">
+                                    <li><a href="index.jsp?cat_id=${cat.cat_id}">${cat.cat_name}</a></li>
+                                    </c:forEach>
                             </ul>
                         </li>
                         <li class="treeview">
@@ -176,12 +181,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="#">Review submession</a></li>
-                                <li><a href="#">Manage Users</a></li>
-                                <li><a href="#">Appending Posts</a></li>
+                                <li><a href="ReviewSubmession.jsp">Appending Posts</a></li>
+                                <li><a href="userstate.jsp">Manage Users</a></li>
+                                <li><a href="rejectedpost.jsp">rejected Posts</a></li>
                             </ul>
                         </li>
-                        <li class="active"><a href="about.jsp"><i class="fa fa-send"></i> <span>about us</span></a></li>
+                        <li class="active"><a href="about.jsp"><i class="fa fa-send"></i> <span>About Us</span></a></li>
                     </ul>
                     <!-- /.sidebar-menu -->
                 </section>
@@ -193,7 +198,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        About Us
+                        All Users
                         <small>.</small>
                     </h1>
                     <ol class="breadcrumb">
@@ -238,40 +243,61 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <th>cv</th>
                                             <th>Type</th>
                                             <th>State</th>
+                                            <th>permission</th>
                                         </tr>
-                                        <tr>
-                                            <td>smsm</td>
-                                            <td>John Doe</td>
-                                            <td>immardp@m.m</td>
-                                            <td>20/5/1999</td>
-                                            <td>male</td>
-                                            <td>9999999</td>
-                                            <td>cs</td>
-                                            <td>3l2</td>
-                                            <td><span class="label label-success">Approved</span></td>
-                                            <td>  <a href="updateState?id=${post.getId()}&state=1" > <span   class="label label-success pull-left">    accepted </span></a>
-                                        <a href="updateState?id=${post.getId()}&state=0" >          <span  class="label label-danger pull-right">  Rejected   </span> </a>
-                                         </td>
-                                            
-                                        </tr>
-                                        <tr>
-                                            <td>smsm</td>
-                                            <td>John Doe</td>
-                                            <td>immardp@m.m</td>
-                                            <td>20/5/1999</td>
-                                            <td>male</td>
-                                            <td>9999999</td>
-                                            <td>cs</td>
-                                            <td>3l2</td>
-                                            <td><span class="label label-warning">Pending</span></td>
-                                            
-                                            <td>
-                                                <a href="updateState?id=${post.getId()}&state=1" > <span   class="label label-success pull-left">    accepted </span></a>
-                                              <a href="updateState?id=${post.getId()}&state=0" >   <span  class="label label-danger pull-right">   Rejected   </span> </a>
-                                          </td>
-                                            
-                                        </tr>
-                                         
+                                        <sql:setDataSource var="db" driver="com.mysql.jdbc.Driver"  url="jdbc:mysql://localhost/journal"  user="root"  password=""/>  
+                                        <sql:query dataSource="${db}" var="rs">  
+                                            SELECT * FROM users AS u  JOIN userpermetion AS p ON u.uname= p.uname ;  
+                                        </sql:query> 
+
+                                        <c:forEach items="${rs.rows}" var="u">
+                                            <tr>
+                                                <td>${u.uname}</td>
+                                                <td>${u.name}</td>
+                                                <td>${u.email}</td>
+                                                <td>${u.DOB}</td>
+                                                <td>${u.gender}</td>
+                                                <td>${u.phone}</td>
+                                                <td>
+                                                    <c:if test = "${u.cat_id ==  1}"> <span class="label label-primary">CS</span> </c:if>
+                                                    <c:if test = "${u.cat_id ==  2}"> <span class="label label-primary">IS</span> </c:if>
+                                                    <c:if test = "${u.cat_id ==  3}"> <span class="label label-primary">it</span> </c:if>
+                                                    <c:if test = "${u.cat_id ==  4}"> <span class="label label-primary">or</span> </c:if>
+                                                    </td>
+                                                    <td>
+
+                                                        <a href="DBFileDownloadServlet?uname=${u.uname}&bid=${u.perm_id}" ><button  class="btn  btn-primary">PDF</button></a>
+
+                                                </td>
+                                                <td> 
+                                                    <c:if test = "${u.perm_id ==  1}"> <span class="label label-default">Reader</span> </c:if>
+                                                    <c:if test = "${u.perm_id ==  2}"> <span class="label label-danger">Auther</span> </c:if>
+                                                    <c:if test = "${u.perm_id ==  3}"> <span class="label label-warning">Reviewer</span> </c:if>
+
+                                                    </td>
+                                                    <td>
+                                                    <c:if test = "${u.states ==  1}"> <span class="label label-success">Approved</span> </c:if> 
+                                                    <c:if test = "${u.states ==  0}">  <span class="label label-warning">pinding</span></c:if> 
+                                                    </td> 
+
+                                                    <td> 
+
+                                                        <a href=" acceptuser.jsp?uname=${u.uname}&perm_id=${u.perm_id} " 
+                                                       <button
+                                                            class="label label-success pull-left" type="submit" name="accept"  >    accepted  </button>
+                                                    </a>
+
+
+                                                    <a   href=" rejectuser.jsp?uname=${u.uname}&perm_id=${u.perm_id} " >      
+                                                        <span  class="label label-danger pull-right">  Rejected   </span> </a>
+
+                                                </td>
+
+                                            </tr>
+                                        </c:forEach>
+
+
+
                                     </table>
                                 </div>
                                 <!-- /.box-body -->

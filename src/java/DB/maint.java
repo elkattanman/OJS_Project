@@ -11,7 +11,7 @@ import model.User;
 import model.post;
 
 /**
- *
+ *s
  * @author Nitro
  */
 public class maint {

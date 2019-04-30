@@ -45,7 +45,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <%
         //filter
-
         if (request.getSession().getAttribute("user") == null) {
             User i = new UserDOA().searchUser("UNKNOWN", "1");
             request.getSession().setAttribute("user", i);
@@ -110,7 +109,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <a href="register.jsp">Sign up</a>
                                             </div>
                                             <div class="col-xs-4 text-center">
-                                                <a href="login.jsp">Login</a>
+                                                <a href="login.jsp">login</a>
                                             </div>
                                             
                                         </div>
@@ -142,8 +141,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="pull-left image">
                             <img src="data:image/jpg;base64,${user.base64Image}" class="img-circle" alt="User Image">
                         </div>
-                        <div class="pull-left info">
-                            <p>${user.name} </p>
+                      <div class="pull-left info">
+                            <p>${user.name}  </p>
                             <!-- Status -->
                             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                         </div>
@@ -190,9 +189,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="#">Review submession</a></li>
-                                <li><a href="#">Manage Users</a></li>
-                                <li><a href="#">Appending Posts</a></li>
+                             <li><a href="ReviewSubmession.jsp">Appending Posts</a></li>
+                                <li><a href="userstate.jsp">Manage Users</a></li>
+                                <li><a href="rejectedpost.jsp">rejected Posts</a></li>
                             </ul>
                         </li>
                         <li><a href="about.jsp"><i class="fa fa-send"></i> <span>about us</span></a></li>
@@ -231,7 +230,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <div class="user-block">
 
                                     <img class="img-circle" src="data:image/jpg;base64,${post.getBase64Image()}" alt="User Image">
-                                    <span class="username"><a href="#">${post.getName()}</a></span>
+                                    <span class="username"><a href="otheruser.jsp?uname=${post.getUname()}">${post.getName()}</a></span>
                                     <span class="description">${post.getUname()} - ${post.getTime_stamp()}</span>
                                 </div>
                                 <!-- /.user-block -->
@@ -268,9 +267,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </form>
                                 <!-- /.box-materail -->
 
-                                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-share"></i> Share</button>
-                                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-thumbs-o-up"></i> Like</button>
-                                <span class="pull-right text-muted">${post.getCateg()}</span>
+                               <span class="pull-right text-muted">${post.getCateg()}</span>
                             </div>
                             <!-- /.box-body -->
 

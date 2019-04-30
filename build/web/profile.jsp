@@ -3,6 +3,7 @@
 <%@page import="DB.PostDOA"%>
 <%@page import="model.post"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -174,10 +175,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="#">Scientific</a></li>
-                                <li><a href="#">Computer Science</a></li>
-                                <li><a href="#">Sport</a></li>
-                                <li><a href="#">Art</a></li>
+
+                                <sql:setDataSource var="db" driver="com.mysql.jdbc.Driver"  url="jdbc:mysql://localhost/journal"  user="root"  password=""/>  
+                                <sql:query dataSource="${db}" var="rs">  
+                                    SELECT * FROM catog;  
+                                </sql:query> 
+                                <c:forEach items="${rs.rows}" var="cat">
+                                    <li><a href="index.jsp?cat_id=${cat.cat_id}">${cat.cat_name}</a></li>
+                                </c:forEach>
                             </ul>
                         </li>
                         <li class="treeview">
@@ -187,9 +192,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="#">Review submession</a></li>
-                                <li><a href="#">Manage Users</a></li>
-                                <li><a href="#">Appending Posts</a></li>
+                                <li><a href="ReviewSubmession.jsp">Appending Posts</a></li>
+                                <li><a href="userstate.jsp">Manage Users</a></li>
+                                <li><a href="rejectedpost.jsp">rejected Posts</a></li>
                             </ul>
                         </li>
                         <li><a href="about.jsp"><i class="fa fa-send"></i> <span>about us</span></a></li>
@@ -204,11 +209,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Profile
+                       Profile
                         <small>${user.uname}</small>
                     </h1>
                     <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i> profile</a></li>
+                         <li><a href="#"><i class="fa fa-dashboard"></i> profile</a></li>
                         <li class="active">${user.uname}</li>
                     </ol>
                 </section>
@@ -299,7 +304,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                             <i class="fa fa-circle-o"></i></button>
                                                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                                         </button>
-                                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                                        <a href="removepost.jsp?title=${post.getTitle()}"    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> </a>
                                                     </div>
                                                     <!-- /.box-tools -->
                                                 </div>
@@ -313,22 +318,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         <div class="form-group">
                                                             <div class="row">
                                                                 <div class="col-xs-3">
-                                                                    <a href="DBFileDownloadServlet?id=${post.getId()}&type=${1}" ><button class="btn pull-right btn-primary">PDF</button></a>
+                                                                  <a href="DBFileDownloadServlet?id=${post.getId()}&type=${1}" >  <button class="btn pull-right btn-primary">PDF</button></a>
                                                                 </div>
                                                                 <div class="col-xs-3">
-                                                                    <a href="DBFileDownloadServlet?id=${post.getId()}&type=${2}" ><button class="btn pull-right btn-primary">DOCS</button></a>
+                                                                    <a href="DBFileDownloadServlet?id=${post.getId()}&type=${2}" > <button class="btn pull-right btn-primary">DOCS</button></a>
                                                                     <!--<button type="submit" class="btn btn-danger pull-right btn-primary btn-block btn-sm">Send</button>-->
                                                                 </div>
                                                                 <div class="col-xs-3">
-                                                                    <a href="DBFileDownloadServlet?id=${post.getId()}&type=${3}" ><button class="btn pull-right btn-primary">HTML</button></a>
+                                                                <a href="DBFileDownloadServlet?id=${post.getId()}&type=${3}" >    <button class="btn pull-right btn-primary">HTML</button></a>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </form>
                                                     <!-- /.box-materail -->
 
-                                                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-share"></i> Share</button>
-                                                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-thumbs-o-up"></i> Like</button>
+                                                     
                                                     <span class="pull-right text-muted">${post.getCateg()}</span>
                                                 </div>
                                                 <!-- /.box-body -->
@@ -339,7 +343,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </div>
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="writepost">
-                                        <form class="form-horizontal" action="writepost" method="post"enctype="multipart/form-data">
+                                        <form class="form-horizontal" action="writepost" method="post" enctype="multipart/form-data">
                                             <div class="box-body">
                                                 <div class="form-group">
                                                     <label for="title" >Title</label>
@@ -375,14 +379,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="changepass">
-                                         <form class="form-horizontal" action="ChangePassword" method="post">
+                                       <form class="form-horizontal" action="ChangePassword" method="post">
 
                                             <div class="box-body">
                                                 <div class="form-group">
                                                     <label for="cur_pass" class ="col-sm-2">Currenet Password</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                                        <input type="password" class="form-control" id= "cur_pass"placeholder="Current Password" name="currentPass">
+                                                         <input type="password" class="form-control" id= "cur_pass"placeholder="Current Password" name="currentPass">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
