@@ -10,11 +10,12 @@ public class UserDOA {
 
     Connection con = DBConnection.GetConnection();
 
-    String insert_user = " INSERT INTO users VALUES(?,?,?,?,?,?,?,?,?,?)";
+    String insert_user = "INSERT INTO users VALUES(?,?,?,?,?,?,?,?,?,?)";
     String insert_userperm = " INSERT INTO userpermetion VALUES(?,?,?)";
     String login_query = "SELECT * FROM users as u JOIN userpermetion as p on u.uname=p.uname WHERE (u.uname=? and u.pass=?) and (p.perm_id=? and p.states='1')";
     String search_query = "SELECT   users.uname  ,   pass  ,   name  ,   email  ,   DOB  ,   image  ,   gender  ,   phone  ,   cat_id  ,   cv   ,  perm_id  ,     states   FROM users  JOIN userpermetion ON users.uname =userpermetion.uname  WHERE users.uname = ? and perm_id=?";
-
+    String update_settings = "UPDATE `users` SET `name`=?,`email`=?,`phone`=? WHERE uname = ?;";
+    String update_password = "UPDATE `users` SET `pass`=? WHERE uname = ?;";
     public boolean insert(User u, int author, int reviewer) {
         PreparedStatement ps, psusp;
         try {
@@ -67,7 +68,7 @@ public class UserDOA {
         // ps.setBlob(8, u.getCv());        
     }
 
-    public boolean login(String uname, String pass , String perm) {
+    public boolean login(String uname, String pass, String perm) {
         PreparedStatement preparedStmt;
         try {
             preparedStmt = con.prepareStatement(login_query);
@@ -85,9 +86,8 @@ public class UserDOA {
         }
         return false;
     }
-    
 
-    public User searchUser(String uname ,String prem_id) {
+    public User searchUser(String uname, String prem_id) {
         User ret = new User();
         PreparedStatement preparedStmt;
         try {
@@ -114,5 +114,40 @@ public class UserDOA {
             Logger.getLogger(UserDOA.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ret;
+    }
+    
+    public boolean update_data(String name , String email, String tel , String uname) {
+       
+        PreparedStatement preparedStmt;
+        int ret= 0 ;
+        try {
+            preparedStmt = con.prepareStatement(update_settings);
+            
+            preparedStmt.setString(1, name);
+            preparedStmt.setString(2, email);
+            preparedStmt.setString(3, tel);
+            preparedStmt.setString(4, uname);
+            ret = preparedStmt.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDOA.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return( ret== 1 )? true:false;
+    }
+    
+     public boolean update_password(String pass ,String uname) {
+       
+        PreparedStatement preparedStmt;
+        int ret= 0 ;
+        try {
+            preparedStmt = con.prepareStatement(update_password);
+            preparedStmt.setString(1, pass);
+            preparedStmt.setString(2, uname);
+            ret = preparedStmt.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDOA.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return( ret== 1 )? true:false;
     }
 }
