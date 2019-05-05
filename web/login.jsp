@@ -1,4 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
+<%request.getSession().removeAttribute("user");%>
 <html>
     <head>
         <meta charset="utf-8">
@@ -28,6 +30,15 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     </head>
     <body class="hold-transition login-page">
+        
+        <c:if test= "${param.error==1}" >
+        <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                Please enter username or password correctly or You choose acceptable  persmession :P 
+        </div>
+        </c:if>
+        
         <div class="login-box">
             <div class="login-logo">
                 <a href="index.jsp"><b>EQRA</b> OJS</a>
@@ -35,7 +46,6 @@
             <!-- /.login-logo -->
             <div class="login-box-body">
                 <p class="login-box-msg">Sign in to start your session</p>
-                <%request.getSession().removeAttribute("user");%>
                 <form action="login" method="post">
 
                     <div class="form-group has-feedback">
