@@ -13,6 +13,15 @@
 <%@page import="model.User"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
+
+<%
+    PostDOA postDB=(PostDOA)getServletContext().getAttribute("postDB");
+        String cat_id = request.getParameter("cat_id");
+        ArrayList<post> all = null;
+        all = postDB.VIEWPOSTNOTACCEPTED(((User)session.getAttribute("user")).getCid());
+        request.setAttribute("posts", all);
+%>
+
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -49,22 +58,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
               href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     </head>
 
-
-    <%
-        //filter
-        if (request.getSession().getAttribute("user") == null) {
-            User i = new UserDOA().searchUser("UNKNOWN", "1");
-            request.getSession().setAttribute("user", i);
-        }
-        String cat_id = request.getParameter("cat_id");
-        ArrayList<post> all = null;
-        if (cat_id == null) {
-            all = new PostDOA().VIEWPOSTNOTACCEPTED();
-        } else {
-            all = new PostDOA().VIEWPOST_cat_not(cat_id);
-        }
-        request.setAttribute("posts", all);
-    %>
 
     <body class="hold-transition skin-blue sidebar-mini">
         <div class="wrapper">
@@ -104,21 +97,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <img src="data:image/jpg;base64,${user.base64Image}" class="img-circle" alt="User Image">
 
                                         <p>
-                                            ${user.name} -     ${user.type}
+                                            ${user.name} -     ${premetion[user.type]}
                                             <small>    ${user.email}</small>
                                         </p>
                                     </li>
                                     <!-- Menu Body -->
                                     <li class="user-body">
                                         <div class="row">
-                                            
+
                                             <div class="col-xs-8 text-center">
                                                 <a href="register.jsp">Sign up</a>
                                             </div>
                                             <div class="col-xs-4 text-center">
                                                 <a href="login.jsp">Login</a>
                                             </div>
-                                            
+
                                         </div>
                                         <!-- /.row -->
                                     </li>
@@ -156,7 +149,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div>
 
                     <!-- search form (Optional) -->
-                    <form action="#" method="get" class="sidebar-form">
+                    <form action="index.jsp" method="get" class="sidebar-form">
                         <div class="input-group">
                             <input type="text" name="q" class="form-control" placeholder="Search...">
                             <span class="input-group-btn">
@@ -171,7 +164,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <ul class="sidebar-menu" data-widget="tree">
                         <li class="header">HEADER</li>
                         <!-- Optionally, you can add icons to the links -->
-                        <li class="active"><a href="index.jsp"><i class="fa fa-home"></i> <span>Home Page</span></a></li>
+                        <li><a href="index.jsp"><i class="fa fa-home"></i> <span>Home Page</span></a></li>
                         <li class="treeview">
                             <a href="#"><i class="fa  fa-edit"></i> <span>Categories</span>
                                 <span class="pull-right-container">
@@ -185,22 +178,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     SELECT * FROM catog;  
                                 </sql:query> 
                                 <c:forEach items="${rs.rows}" var="cat">
-                                    <li><a href="index.jsp?cat_id=${cat.cat_id}">${cat.cat_name}</a></li>
-                                </c:forEach>
+                                    <li><a href="index.jsp?cat_id=${cat.cat_id}"> <i class="fa fa-circle-o"></i>${cat.cat_name}</a></li>
+                                        </c:forEach>
                             </ul>
                         </li>
-                        <li class="treeview">
-                            <a href="#"><i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                         <li><a href="ReviewSubmession.jsp">Appending Posts</a></li>
-                                <li><a href="userstate.jsp">Manage Users</a></li>
-                                <li><a href="rejectedpost.jsp">rejected Posts</a></li>
-                            </ul>
-                        </li>
+                        <c:if test = "${user.type !=  1 and user.type !=  2}"> 
+                            <li class="treeview">
+                                <a href="#"><i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                                    <span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <c:if test = "${user.type ==  3}"><li><a href="ReviewSubmession.jsp"><i class="fa fa-circle-o"></i>Appending Posts</a></li></c:if>
+                                    <c:if test = "${user.type ==  4}"><li><a href="ManageUsers.jsp"><i class="fa fa-circle-o"></i>Manage Users</a></li></c:if>
+                                    <c:if test = "${user.type ==  3}"><li><a href="rejectedpost.jsp"><i class="fa fa-circle-o"></i>Rejected Posts</a></li></c:if>
+                                </ul>
+                            </li>
+                        </c:if>
                         <li><a href="about.jsp"><i class="fa fa-send"></i> <span>about us</span></a></li>
                     </ul>
                     <!-- /.sidebar-menu -->
@@ -213,7 +208,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                       reviewed Page
+                        reviewed Page
                         <small>All report</small>
                     </h1>
                     <ol class="breadcrumb">
@@ -271,17 +266,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             </div>
                                         </div>
                                     </div>
-                                             
-                                            
-                                             <div class="box-footer">
-                                              <a href="updateState?id=${post.getId()}&state=1" >  <button   class="btn btn-success pull-right">    accepted </button>  </a>
-                                               <a href="updateState?id=${post.getId()}&state=0" >     <button  class="btn btn-danger pull-right">  Rejected  </button> </a> 
-                                            </div>
+
+
+                                    <div class="box-footer">
+                                        <a href="updateState?id=${post.getId()}&state=1" >  <button   class="btn btn-success pull-right">    accepted </button>  </a>
+                                        <a href="updateState?id=${post.getId()}&state=2" >     <button  class="btn btn-danger pull-right">  Rejected  </button> </a> 
+                                    </div>
                                 </form>
                                 <!-- /.box-materail -->
 
-                                 
-                                <span class="pull-right text-muted">${post.getCateg()}</span>
+
+                                <span class="pull-right text-muted">${categ[post.getCateg()]}</span>
                             </div>
                             <!-- /.box-body -->
 

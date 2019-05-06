@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -115,13 +117,13 @@
                     <div class="form-group">
                         <label>Categories</label>
                         <select class="form-control select2" name="cat" style="width: 100%;" >
-                            <option>Computer Science</option>
-                            <option>is</option>
-                            <option >it</option>
-                            <option>Art</option>
-                            <option>Web Develop</option>
-                            <option>ART</option>
-
+                            <sql:setDataSource var="db" driver="com.mysql.jdbc.Driver"  url="jdbc:mysql://localhost/journal"  user="root"  password=""/>  
+                                <sql:query dataSource="${db}" var="rs">  
+                                    SELECT * FROM catog;  
+                                </sql:query>
+                                <c:forEach items="${rs.rows}" var="cat">
+                                    <option>${cat.cat_name}</option>
+                                </c:forEach>
                         </select>
                         <div class="form-group">
                             <label class="col-sm-10">Request the following roles :</label>
@@ -148,7 +150,7 @@
 
 
 
-                <a href="login.html" class="text-center">I already have a membership</a>
+                <a href="login.jsp" class="text-center">I already have a membership</a>
             </div>
             <!-- /.form-box -->
         </div>

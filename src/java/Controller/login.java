@@ -38,7 +38,6 @@ public class login extends HttpServlet {
             String e = request.getParameter("uname");
             String p = request.getParameter("pass");
             String s = request.getParameter("type");
-
             if (s.equals("Reader")) {
                 s = "1";
             } else if (s.equals("Author")) {
@@ -56,14 +55,15 @@ public class login extends HttpServlet {
             if (check) {
                 System.out.println("here");
                 User user = db.searchUser(e, s);
-                out.print(user);
                 System.out.println(user);
                 request.getSession().setAttribute("user", user);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
-                dispatcher.forward(request, response);
+                response.sendRedirect("/OJS");
+//                RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+//                dispatcher.forward(request, response);
             } else {
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");//with request with mess
-                dispatcher.forward(request, response);
+//                RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");//with request with mess
+//                dispatcher.forward(request, response);
+                response.sendRedirect("/OJS/login.jsp?error=1");
                 out.println("Please enter username or password correctly");
             }
         }

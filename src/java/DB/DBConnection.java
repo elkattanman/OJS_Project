@@ -2,6 +2,8 @@
 package DB;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class DBConnection {
@@ -23,6 +25,15 @@ public class DBConnection {
         return con;
     }
     
+    public static void closeCon(){
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println("connection can't close");
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+
     
     
 }

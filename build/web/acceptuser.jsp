@@ -18,4 +18,4 @@
 </sql:update>"
 <% request.removeAttribute("uname");%>
 <% request.removeAttribute("perm_id");%>
-<% response.sendRedirect("userstate.jsp");%>
+<% response.sendRedirect("ManageUsers.jsp");%>

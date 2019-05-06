@@ -4,6 +4,13 @@
 <%@page import="model.post"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
+
+<%
+        User u=(User)request.getSession().getAttribute("user");
+        PostDOA postDB=(PostDOA)getServletContext().getAttribute("postDB");
+        ArrayList<post> all = postDB.VIEWPOST_uname(u.getUname());
+        request.setAttribute("posts", all);
+%>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -39,32 +46,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     </head>
-    <!--
-    BODY TAG OPTIONS:
-    =================
-    Apply one or more of the following classes to get the
-    desired effect
-    |---------------------------------------------------------|
-    | SKINS         | skin-blue                               |
-    |               | skin-black                              |
-    |               | skin-purple                             |
-    |               | skin-yellow                             |
-    |               | skin-red                                |
-    |               | skin-green                              |
-    |---------------------------------------------------------|
-    |LAYOUT OPTIONS | fixed                                   |
-    |               | layout-boxed                            |
-    |               | layout-top-nav                          |
-    |               | sidebar-collapse                        |
-    |               | sidebar-mini                            |
-    |---------------------------------------------------------|
-    -->
     
-    <%
-        User u=(User)request.getSession().getAttribute("user");
-        ArrayList<post> all = new PostDOA().VIEWPOST_uname(u.getUname());
-        request.setAttribute("posts", all);
-    %>
     <body class="hold-transition skin-blue sidebar-mini">
         <div class="wrapper">
 
@@ -103,7 +85,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <img src="data:image/jpg;base64,${user.base64Image}" class="img-circle" alt="User Image">
 
                                         <p>
-                                            ${user.name} - ${user.type}
+                                            ${user.name} - ${premetion[user.type]}
                                             <small> ${user.email}</small>
                                         </p>
                                     </li>
@@ -152,7 +134,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div>
 
                     <!-- search form (Optional) -->
-                    <form action="#" method="get" class="sidebar-form">
+                    <form action="index.jsp" method="get" class="sidebar-form">
                         <div class="input-group">
                             <input type="text" name="q" class="form-control" placeholder="Search...">
                             <span class="input-group-btn">
@@ -181,22 +163,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     SELECT * FROM catog;  
                                 </sql:query> 
                                 <c:forEach items="${rs.rows}" var="cat">
-                                    <li><a href="index.jsp?cat_id=${cat.cat_id}">${cat.cat_name}</a></li>
+                                    <li><a href="index.jsp?cat_id=${cat.cat_id}"><i class="fa fa-circle-o"></i>${cat.cat_name}</a></li>
                                 </c:forEach>
                             </ul>
                         </li>
-                        <li class="treeview">
-                            <a href="#"><i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="ReviewSubmession.jsp">Appending Posts</a></li>
-                                <li><a href="userstate.jsp">Manage Users</a></li>
-                                <li><a href="rejectedpost.jsp">rejected Posts</a></li>
-                            </ul>
-                        </li>
+                        <c:if test = "${user.type !=  1 and user.type !=  2}"> 
+                            <li class="treeview">
+                                <a href="#"><i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                                    <span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <c:if test = "${user.type ==  3}"><li><a href="ReviewSubmession.jsp"><i class="fa fa-circle-o"></i>Appending Posts</a></li></c:if>
+                                    <c:if test = "${user.type ==  4}"><li><a href="ManageUsers.jsp"><i class="fa fa-circle-o"></i>Manage Users</a></li></c:if>
+                                    <c:if test = "${user.type ==  3}"><li><a href="rejectedpost.jsp"><i class="fa fa-circle-o"></i>Rejected Posts</a></li></c:if>
+                                </ul>
+                            </li>
+                        </c:if>
                         <li><a href="about.jsp"><i class="fa fa-send"></i> <span>about us</span></a></li>
                     </ul>
                     <!-- /.sidebar-menu -->
@@ -234,7 +218,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                     <h3 class="profile-username text-center">${user.name}</h3>
 
-                                    <p class="text-muted text-center">${user.type}</p>
+                                    <p class="text-muted text-center">${premetion[user.type]} ${categ[user.cid]}</p>
 
                                     <ul class="list-group list-group-unbordered">
                                         <li class="list-group-item">
@@ -281,12 +265,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="col-md-9">
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs">
-                                    <li class="active"><a href="#activity" data-toggle="tab">Activity</a></li>
-                                    <li><a href="#writepost" data-toggle="tab">Write Post</a></li>
-                                    <li><a href="#changepass" data-toggle="tab">Change Password</a></li>
+                                    <c:if test = "${user.type ==  2}"><li class="active"><a href="#activity" data-toggle="tab">Activity</a></li>
+                                    <li><a href="#writepost" data-toggle="tab">Write Post</a></li></c:if>
+                                    <li></i><a href="#changepass" data-toggle="tab">Change Password</a></li>
                                     <li><a href="#settings" data-toggle="tab">Settings</a></li>
                                 </ul>
                                 <div class="tab-content">
+                                    <c:if test = "${user.type ==  2}">
                                     <div class="active tab-pane" id="activity">
                                         <c:forEach items="${posts}" var="post">
                                             <!-- post -->
@@ -333,7 +318,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     <!-- /.box-materail -->
 
                                                      
-                                                    <span class="pull-right text-muted">${post.getCateg()}</span>
+                                                    <span class="pull-right text-muted">${categ[post.getCateg()]}</span>
                                                 </div>
                                                 <!-- /.box-body -->
 
@@ -376,6 +361,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </form>
                                     </div>
                                     <!-- /.tab-pane -->
+                                    </c:if>
 
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="changepass">

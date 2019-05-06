@@ -1,5 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <filter>
+        <filter-name>checkSession</filter-name>
+        <filter-class>Flitters.checkSession</filter-class>
+    </filter>
+    <filter>
+        <filter-name>AuthorFiltter</filter-name>
+        <filter-class>Flitters.ReviewerFiltter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>MangerFillter</filter-name>
+        <filter-class>Flitters.ManagerFillter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>checkSession</filter-name>
+        <url-pattern>/index.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>checkSession</filter-name>
+        <url-pattern>/profile.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>checkSession</filter-name>
+        <url-pattern>/rejectedpost.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>checkSession</filter-name>
+        <url-pattern>/removepost.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>checkSession</filter-name>
+        <url-pattern>/ManageUsers.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>checkSession</filter-name>
+        <url-pattern>/acceptuser.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>checkSession</filter-name>
+        <url-pattern>/ReviewSubmession.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthorFiltter</filter-name>
+        <url-pattern>/rejectedpost.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthorFiltter</filter-name>
+        <url-pattern>/ReviewSubmession.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>MangerFillter</filter-name>
+        <url-pattern>/ManageUsers.jsp</url-pattern>
+    </filter-mapping>
+    
+    <listener>
+        <description>ServletContextListener</description>
+        <listener-class>Listener.contextListener</listener-class>
+    </listener>
     <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>Controller.login</servlet-class>
@@ -23,10 +81,6 @@
     <servlet>
         <servlet-name>updateState</servlet-name>
         <servlet-class>Controller.updateState</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>rejectedpost</servlet-name>
-        <servlet-class>Controller.rejectedpost</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>
@@ -56,10 +110,6 @@
             <url-pattern>/ChangePassword</url-pattern>
         </servlet-mapping>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>rejectedpost</servlet-name>
-        <url-pattern>/rejectedpost</url-pattern>
-    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -71,4 +121,8 @@
         <version>1.2</version>
         <scope>provided</scope>
     </dependency>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.jsp</location>
+    </error-page>
 </web-app>

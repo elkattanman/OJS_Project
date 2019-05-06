@@ -114,7 +114,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <img src="data:image/jpg;base64,${user.base64Image}" class="img-circle" alt="User Image">
 
                                         <p>
-                                            ${user.name} - ${user.type}
+                                            ${user.name} - ${premetion[user.type]}
                                             <small> ${user.email}</small>
                                         </p>
                                     </li>
@@ -163,7 +163,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div>
 
                     <!-- search form (Optional) -->
-                    <form action="#" method="get" class="sidebar-form">
+                    <form action="index.jsp" method="get" class="sidebar-form">
                         <div class="input-group">
                             <input type="text" name="q" class="form-control" placeholder="Search...">
                             <span class="input-group-btn">
@@ -192,22 +192,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     SELECT * FROM catog;  
                                 </sql:query> 
                                 <c:forEach items="${rs.rows}" var="cat">
-                                    <li><a href="index.jsp?cat_id=${cat.cat_id}">${cat.cat_name}</a></li>
+                                    <li><a href="index.jsp?cat_id=${cat.cat_id}"><i class="fa fa-circle-o"></i>${cat.cat_name}</a></li>
                                     </c:forEach>
                             </ul>
                         </li>
-                        <li class="treeview">
-                            <a href="#"><i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="ReviewSubmession.jsp">Appending Posts</a></li>
-                                <li><a href="userstate.jsp">Manage Users</a></li>
-                                <li><a href="rejectedpost.jsp">rejected Posts</a></li>
-                            </ul>
-                        </li>
+                        <c:if test = "${user.type !=  1 and user.type !=  2}"> 
+                            <li class="treeview">
+                                <a href="#"><i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                                    <span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <c:if test = "${user.type ==  3}"><li><a href="ReviewSubmession.jsp"><i class="fa fa-circle-o"></i>Appending Posts</a></li></c:if>
+                                    <c:if test = "${user.type ==  4}"><li><a href="ManageUsers.jsp"><i class="fa fa-circle-o"></i>Manage Users</a></li></c:if>
+                                    <c:if test = "${user.type ==  3}"><li><a href="rejectedpost.jsp"><i class="fa fa-circle-o"></i>Rejected Posts</a></li></c:if>
+                                </ul>
+                            </li>
+                        </c:if>
                         <li><a href="about.jsp"><i class="fa fa-send"></i> <span>about us</span></a></li>
                     </ul>
                     <!-- /.sidebar-menu -->
@@ -250,23 +252,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <c:forEach var = "row" items = "${result.rows}">
                                 <div class="box box-primary">
                                     <div class="box-body box-profile">
-                                      
+
                                         <h3 class="profile-username text-center">  <c:out value = "${row.name}"/> </h3>
 
                                         <p class="text-muted text-center">
-                                            <c:if test = "${user.type ==  1}"> <span class="label label-success">CS</span> </c:if> 
-                                            <c:if test = "${user.type ==  2}">  <span class="label label-warning">IS</span></c:if> 
-                                            <c:if test = "${user.type ==  3}">  <span class="label label-warning">IT</span></c:if> 
-                                            <c:if test = "${user.type ==  4}">  <span class="label label-warning">Or</span></c:if> 
+                                            <span class="label label-success">${categ[user.type]}</span>  
+                                        </p>
 
-                                            </p>
-
-                                            <ul class="list-group list-group-unbordered">
-                                                <li class="list-group-item">
-                                                    <b>Followers</b> <a class="pull-right">1,322</a>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <b>Submession</b> <a class="pull-right">${posts.size()}</a>
+                                        <ul class="list-group list-group-unbordered">
+                                            <li class="list-group-item">
+                                                <b>Followers</b> <a class="pull-right">1,322</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Submession</b> <a class="pull-right">${posts.size()}</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -355,7 +353,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     <!-- /.box-materail -->
 
 
-                                                    <span class="pull-right text-muted">${post.getCateg()}</span>
+                                                    <span class="pull-right text-muted">${categ[post.getCateg()]}</span>
                                                 </div>
                                                 <!-- /.box-body -->
 

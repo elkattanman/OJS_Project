@@ -17,9 +17,8 @@ import model.post;
 public class maint {
 
     public static void main(String[] args) {
-        UserDOA o=new UserDOA();
-        System.out.println(o.login("sasa", "admin", "1"));
-        System.out.println(o.update_data("Mustafa", "asdxasd012@gmail.com", "01090481564", "sasa"));
+        System.out.println(new PostDOA().Search("Hello World"));
+        
         
     }
 }

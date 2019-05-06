@@ -9,15 +9,13 @@
 <!DOCTYPE html>
 
 <sql:setDataSource var="db" driver="com.mysql.jdbc.Driver"  url="jdbc:mysql://localhost/journal"  user="root"  password=""/>  
-<%String u =request.getParameter("title");%>
- 
+<%String u = request.getParameter("title");%>
+
 <sql:update var="x" dataSource="${db}"> 
     UPDATE submission  SET   statepost = '2' WHERE  title= ? ;
-    <sql:param value="<%= u %>" />
-     
+    <sql:param value="<%= u%>" />
+
 </sql:update>"
-<% request.removeAttribute("title");
-System.out.println("remoooooooooooooooooooooooooooooooooooooooooooo");
-%>
- 
-<% response.sendRedirect("profile.jsp"); %>
+<% request.removeAttribute("title");%>
+
+<% response.sendRedirect("profile.jsp");%>

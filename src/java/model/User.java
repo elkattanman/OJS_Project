@@ -45,8 +45,9 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "uname=" + uname + ", pass=" + pass + ", name=" + name + ", email=" + email + ", cid=" + cid + ", phone=" + phone + ", gender=" + gender + ", type=" + type + ", DOB=" + DOB + ", image=" + image + ", cv=" + cv + '}';
+        return "User{" + "uname=" + uname + ", pass=" + pass + ", name=" + name + ", email=" + email + ", cid=" + cid + ", phone=" + phone + ", gender=" + gender + ", type=" + type  + ", DOB=" + DOB + ", image=" + (image!=null) + ", cv=" + cv + '}';
     }
+
 
     public String getType() {
         return type;

@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -28,7 +29,7 @@ import model.User;
  * @author Nitro
  */
 @WebServlet(name = "register", urlPatterns = {"/register"})
-@MultipartConfig
+@MultipartConfig(maxFileSize = 1024*1024*1024)
 public class register extends HttpServlet {
 
     InputStream is = null;
@@ -40,6 +41,7 @@ public class register extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            HashMap cate=(HashMap)getServletContext().getAttribute("categ2");
 
             user.setUname(request.getParameter("uname"));
             user.setName(request.getParameter("name"));
@@ -55,12 +57,11 @@ public class register extends HttpServlet {
             user.setDOB(sqlDate);
             user.setImage(request.getPart("image").getInputStream());
             user.setGender(request.getParameter("gender"));
-            if(request.getParameter("cat").equals("Computer Science")){  user.setCid("1");}
+            user.setCid((String) cate.get(request.getParameter("cat")));
           
             
             user.setPhone(request.getParameter("phone"));
             user.setCv(request.getPart("cv").getInputStream());
-           user.setType(request.getParameter("type"));
 
             if (request.getParameter("author") != null) {
                 auth = 1;
@@ -68,8 +69,12 @@ public class register extends HttpServlet {
             if (request.getParameter("reviwer") != null) {
                 rev = 1;
             }
-            out.print("get all  prameter ");
+            out.println("get all  prameter ");
             out.print(user);
+            if (new UserDOA().insert(user, auth, rev)) {
+                response.sendRedirect("/OJS/login.jsp");
+            }
+                request.getSession().setAttribute("user", user);
             if (new UserDOA().insert(user, auth, rev)) {
                 request.getSession().setAttribute("user", user);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
