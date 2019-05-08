@@ -43,7 +43,7 @@ public class writepost extends HttpServlet {
             pst.setHtml(request.getPart("htmlFile").getInputStream());
             pst.setDcox(request.getPart("docsFile").getInputStream());
             u = (User) request.getSession().getAttribute("user");
-            pst.setCateg(u.getType()); // session
+            pst.setCateg(u.getCid()); 
             pst.setUname(u.getUname());
             pst.setTime_stamp(new Date(System.currentTimeMillis()));
             System.out.println(pst);

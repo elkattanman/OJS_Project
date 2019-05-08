@@ -10,13 +10,9 @@
 
 <%
     PostDOA postDB = (PostDOA) getServletContext().getAttribute("postDB");
-    String cat_id = request.getParameter("cat_id");
+    //String cat_id = request.getParameter("cat_id");
     ArrayList<post> all = null;
-    if (cat_id != null) {
-        all = postDB.VIEWPOST_cat_rej(cat_id);
-    } else {
-        all = postDB.VIEWPOSTREJ();
-    }
+    all = postDB.VIEWPOSTREJ(((User) session.getAttribute("user")).getCid());
     request.setAttribute("posts", all);
 %>
 

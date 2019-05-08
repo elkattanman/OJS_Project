@@ -109,7 +109,7 @@
                     </div>
                     <div class="form-group has-feedback">
                         <div class="row">
-                            <label for="img" class="col-xs-2">CV</label>
+                            <label for="cv" class="col-xs-2">CV</label>
                             <div class="col-xs-10"><input type="file" class="form-control" id="cv" name="cv"></div>
                         </div>
 

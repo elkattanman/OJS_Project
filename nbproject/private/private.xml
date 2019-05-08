@@ -3,11 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/media/mustafa/4DD2D34212D6602B/SW2Project/java/OJS/web/index.jsp</file>
             <file>file:/media/mustafa/4DD2D34212D6602B/SW2Project/java/OJS/src/java/Listener/contextListener.java</file>
-            <file>file:/media/mustafa/4DD2D34212D6602B/SW2Project/java/OJS/src/java/Controller/login.java</file>
-            <file>file:/media/mustafa/4DD2D34212D6602B/SW2Project/java/OJS/web/ReviewSubmession.jsp</file>
-            <file>file:/media/mustafa/4DD2D34212D6602B/SW2Project/java/OJS/src/java/DB/PostDOA.java</file>
+            <file>file:/media/mustafa/4DD2D34212D6602B/SW2Project/java/OJS/web/ManageUsers.jsp</file>
+            <file>file:/media/mustafa/4DD2D34212D6602B/SW2Project/java/OJS/src/java/Flitters/ReviewerFiltter.java</file>
+            <file>file:/media/mustafa/4DD2D34212D6602B/SW2Project/java/OJS/src/java/Flitters/checkSession.java</file>
+            <file>file:/media/mustafa/4DD2D34212D6602B/SW2Project/java/OJS/web/profile.jsp</file>
+            <file>file:/media/mustafa/4DD2D34212D6602B/SW2Project/java/OJS/web/WEB-INF/web.xml</file>
         </group>
     </open-files>
 </project-private>

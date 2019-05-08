@@ -19,6 +19,7 @@ public class UserDOA {
     public boolean insert(User u, int author, int reviewer) {
         PreparedStatement ps, psusp;
         try {
+            //`uname`, `pass`, `name`, `email`, `DOB`, `image`, `gender`, `phone`, `cat_id`, `cv`
             ps = con.prepareStatement(insert_user);
             psusp = con.prepareStatement(insert_userperm);
             ps.setString(1, u.getUname());
@@ -36,23 +37,23 @@ public class UserDOA {
             psusp.setString(1, "1");    //reader
             psusp.setString(2, u.getUname());
             psusp.setString(3, "1");
-            psusp.executeUpdate();
+            ret+=psusp.executeUpdate();
             //////////////////////////////
             if (author == 1) {
                 psusp.setString(1, "2");    //author
                 psusp.setString(2, u.getUname());
                 psusp.setString(3, "0");
-                psusp.executeUpdate();
+                ret+=psusp.executeUpdate();
             }
             ////////////////////////////////
             if (reviewer == 1) {
                 psusp.setString(1, "3");    //reviewer
                 psusp.setString(2, u.getUname());
                 psusp.setString(3, "0");
-                psusp.executeUpdate();
+                ret+=psusp.executeUpdate();
             }
             /////////////////////////////////////////////
-            if (ret == 1) {
+            if (ret == 4) {
                 con.close();
                 return true;
             } else {
@@ -132,7 +133,7 @@ public class UserDOA {
         } catch (SQLException ex) {
             Logger.getLogger(UserDOA.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return( ret== 1 )? true:false;
+       return( ret== 1 );
     }
     
      public boolean update_password(String pass ,String uname) {

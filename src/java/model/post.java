@@ -132,13 +132,9 @@ public class post {
 
     @Override
     public String toString() {
-        return "post{" + "title=" + title + ", Description=" + Description + ", keyword=" + keyword + ", uname=" + uname + ", categ=" + categ + ", base64Image=" + base64Image + ", name=" + name + ", state=" + state + ", time_stamp=" + time_stamp + ", image=" + image + ", pdf=" + pdf + ", dcox=" + dcox + ", html=" + html + "}\n";
+        return "post{" + "title=" + title + ", Description=" + Description + ", keyword=" + keyword + ", uname=" + uname + ", categ=" + categ + ", base64Image=" + (base64Image!=null) + ", name=" + name + ", state=" + state + ", time_stamp=" + time_stamp + ", image=" + (image!=null) + ", pdf=" + pdf + ", dcox=" + dcox + ", html=" + html + ", id=" + id + '}';
     }
-
-  
-
-   
-
+    
     public String getKeyword() {
         return keyword;
     }

@@ -156,7 +156,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </ul>
                         </li>
                         <c:if test = "${user.type !=  1 and user.type !=  2}"> 
-                            <li class="treeview">
+                            <li class="treeview active">
                                 <a href="#"><i class="fa fa-dashboard"></i> <span>Dashboard</span>
                                     <span class="pull-right-container">
                                         <i class="fa fa-angle-left pull-right"></i>
@@ -164,7 +164,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </a>
                                 <ul class="treeview-menu">
                                     <c:if test = "${user.type ==  3}"><li><a href="ReviewSubmession.jsp"><i class="fa fa-circle-o"></i>Appending Posts</a></li></c:if>
-                                    <c:if test = "${user.type ==  4}"><li><a href="ManageUsers.jsp"><i class="fa fa-circle-o"></i>Manage Users</a></li></c:if>
+                                    <c:if test = "${user.type ==  4}"><li class="active"><a href="ManageUsers.jsp"><i class="fa fa-circle-o"></i>Manage Users</a></li></c:if>
                                     <c:if test = "${user.type ==  3}"><li><a href="rejectedpost.jsp"><i class="fa fa-circle-o"></i>Rejected Posts</a></li></c:if>
                                 </ul>
                             </li>
@@ -230,7 +230,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </tr>
                                         <sql:setDataSource var="db" driver="com.mysql.jdbc.Driver"  url="jdbc:mysql://localhost/journal"  user="root"  password=""/>  
                                         <sql:query dataSource="${db}" var="rs">  
-                                            SELECT * FROM users AS u  JOIN userpermetion AS p ON u.uname= p.uname ;  
+                                            SELECT * FROM users AS u  JOIN userpermetion AS p ON u.uname= p.uname ORDER BY u.uname ASC;  
                                         </sql:query> 
 
                                         <c:forEach items="${rs.rows}" var="u">

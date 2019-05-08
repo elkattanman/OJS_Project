@@ -14,18 +14,33 @@ public class User {
 
     Date DOB;
     InputStream image, cv;
-    
-    public String getBase64Image() {
-        return base64Image;
+
+    public User() {
     }
 
-    public void setBase64Image(String base64Image) {
+    public User(String uname, String pass, String name, String email, String cid, String phone, String gender, String type, String base64Image, Date DOB, InputStream image, InputStream cv) {
+        this.uname = uname;
+        this.pass = pass;
+        this.name = name;
+        this.email = email;
+        this.cid = cid;
+        this.phone = phone;
+        this.gender = gender;
+        this.type = type;
         this.base64Image = base64Image;
+        this.DOB = DOB;
+        this.image = image;
+        this.cv = cv;
     }
 
+    @Override
+    public String toString() {
+        return "User{" + "uname=" + uname + ", pass=" + pass + ", name=" + name + ", email=" + email + ", cid=" + cid + ", phone=" + phone + ", gender=" + gender + ", type=" + type + ", DOB=" + DOB + ", image=" + image + ", cv=" + cv + '}';
+    }
+    
     public void cimage() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[4096];
+        byte[] buffer = new byte[4*1024*1024];
         int bytesRead = -1;
 
         try {
@@ -41,61 +56,6 @@ public class User {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-
-    @Override
-    public String toString() {
-        return "User{" + "uname=" + uname + ", pass=" + pass + ", name=" + name + ", email=" + email + ", cid=" + cid + ", phone=" + phone + ", gender=" + gender + ", type=" + type  + ", DOB=" + DOB + ", image=" + (image!=null) + ", cv=" + cv + '}';
-    }
-
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public void setImage(InputStream image) {
-        this.image = image;
-        cimage();
-    }
-
-    public void setCv(InputStream cv) {
-        this.cv = cv;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public InputStream getImage() {
-        return image;
-    }
-
-    public InputStream getCv() {
-        return cv;
-    }
-
-    public Date getDOB() {
-        return DOB;
-    }
-
-    public void setDOB(Date DOB) {
-        this.DOB = DOB;
     }
 
     public String getUname() {
@@ -138,4 +98,61 @@ public class User {
         this.cid = cid;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getBase64Image() {
+        return base64Image;
+    }
+
+    public void setBase64Image(String base64Image) {
+        this.base64Image = base64Image;
+    }
+
+    public Date getDOB() {
+        return DOB;
+    }
+
+    public void setDOB(Date DOB) {
+        this.DOB = DOB;
+    }
+
+    public InputStream getImage() {
+        return image;
+    }
+
+    public void setImage(InputStream image) {
+        this.image = image;
+        cimage();
+    }
+
+    public InputStream getCv() {
+        return cv;
+    }
+
+    public void setCv(InputStream cv) {
+        this.cv = cv;
+    }
+    
 }

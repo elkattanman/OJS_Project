@@ -15,11 +15,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 
 <%
-    PostDOA postDB=(PostDOA)getServletContext().getAttribute("postDB");
-        String cat_id = request.getParameter("cat_id");
-        ArrayList<post> all = null;
-        all = postDB.VIEWPOSTNOTACCEPTED(((User)session.getAttribute("user")).getCid());
-        request.setAttribute("posts", all);
+    PostDOA postDB = (PostDOA) getServletContext().getAttribute("postDB");
+    String cat_id = request.getParameter("cat_id");
+    ArrayList<post> all = null;
+    all = postDB.VIEWPOSTNOTACCEPTED(((User) session.getAttribute("user")).getCid());
+    request.setAttribute("posts", all);
 %>
 
 <!DOCTYPE html>
@@ -193,8 +193,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <c:if test = "${user.type ==  3}"><li><a href="ReviewSubmession.jsp"><i class="fa fa-circle-o"></i>Appending Posts</a></li></c:if>
                                     <c:if test = "${user.type ==  4}"><li><a href="ManageUsers.jsp"><i class="fa fa-circle-o"></i>Manage Users</a></li></c:if>
                                     <c:if test = "${user.type ==  3}"><li><a href="rejectedpost.jsp"><i class="fa fa-circle-o"></i>Rejected Posts</a></li></c:if>
-                                </ul>
-                            </li>
+                                    </ul>
+                                </li>
                         </c:if>
                         <li><a href="about.jsp"><i class="fa fa-send"></i> <span>about us</span></a></li>
                     </ul>
